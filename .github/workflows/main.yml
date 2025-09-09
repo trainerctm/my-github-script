@@ -1,33 +1,22 @@
-name: Learning GitHub Script
+name: Auto Issue Comment
 on:
   issues:
     types: [opened]
+
+permissions:
+  issues: write
+
 jobs:
   comment:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
     steps:
-      - name: Comment on new issue
-        uses: actions/github-script@v7
+      - uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             await github.rest.issues.createComment({
-              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "🎉 You've created this issue comment using GitHub Script!!!"
-            });
-      - name: Add issue to project board
-        if: contains(github.event.issue.labels.*.name, 'bug')
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            // Replace 12345678 with your actual project column ID
-            await github.rest.projects.createCard({
-              column_id: 12345678,  // Replace with actual column ID
-              content_id: context.payload.issue.id,
-              content_type: "Issue"
+              issue_number: context.issue.number,
+              body: "👋 Thanks for opening this issue! We’ll take a look soon."
             });
