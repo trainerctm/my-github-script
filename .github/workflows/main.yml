@@ -22,7 +22,7 @@ jobs:
               body: "👋 Thanks for opening this issue!"
             });
 
-      # 2B: Auto-label bug (case-insensitive)
+      # Auto-label bug (case-insensitive)
       - uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -38,36 +38,4 @@ jobs:
               });
             }
 
-      # 2C: Assign default owner
-      - uses: actions/github-script@v8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        # Replace with your real GitHub username
-          script: |
-            await github.rest.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              assignees: ["YOUR_GITHUB_USERNAME"]
-            });
-
-      # 2D: Close duplicates (title contains "[duplicate]" in any case)
-      - uses: actions/github-script@v8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const title = (context.payload.issue.title || "").toLowerCase();
-            if (title.includes("[duplicate]")) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: "🔒 Closing as duplicate. Please continue discussion on the original issue."
-              });
-              await github.rest.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                state: "closed"
-              });
-            }
+     
