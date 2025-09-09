@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      
     steps:
       - name: Comment on new issue
         uses: actions/github-script@v7
@@ -26,8 +25,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            // Replace 12345678 with your actual project column ID
             await github.rest.projects.createCard({
-              column_id: 12345678,  # Replace with your actual column ID
+              column_id: 12345678,  // Replace with actual column ID
               content_id: context.payload.issue.id,
               content_type: "Issue"
             });
